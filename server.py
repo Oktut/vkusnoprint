@@ -32,15 +32,26 @@ def main():
                         help="Server address"
                         )
     parser.add_argument(
-                        "port", type=int, help="Server port")
+                        "port",
+                        type=int,
+                        help="Server port"
+                        )
     parser.add_argument(
                         "operator",
                         type=str,
                         choices=["+", "-", "*", "/"],
                         help="Operator (+, -, *, /)"
                         )
-    parser.add_argument("num1", type=float, help="First number")
-    parser.add_argument("num2", type=float, help="Second number")
+    parser.add_argument(
+                        "num1",
+                        type=float,
+                        help="First number"
+                        )
+    parser.add_argument(
+                        "num2",
+                        type=float,
+                        help="Second number"
+                        )
     args = parser.parse_args()
 
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as client_socket:
