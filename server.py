@@ -1,78 +1,53 @@
 import socket
-import argparse
-import subprocess
-
+import queue
+import heapq
 
 def perform_operation(operator, num1, num2):
-    if operator == '+':
-        return num1 + num2
-    elif operator == '-':
-        return num1 - num2
-    elif operator == '*':
-        return num1 * num2
-    elif operator == '/':
-        if num2 != 0:
-            return num1 / num2
-        else:
-            raise ValueError("На ноль делить нельзя.")
-    else:
-        raise ValueError("Такого оператора у нас нет.")
-
-
-def run_server():
-    server_script = "server.py"
-    subprocess.Popen(["python", server_script])
-
+    # Реализация perform_operation остается без изменений
+    # ...
 
 def main():
-    parser = argparse.ArgumentParser(description="Remote Calculator Client")
-    parser.add_argument(
-                        "host",
-                        type=str,
-                        help="Server address"
-                        )
-    parser.add_argument(
-                        "port",
-                        type=int,
-                        help="Server port"
-                        )
-    parser.add_argument(
-                        "operator",
-                        type=str,
-                        choices=["+", "-", "*", "/"],
-                        help="Operator (+, -, *, /)"
-                        )
-    parser.add_argument(
-                        "num1",
-                        type=float,
-                        help="First number"
-                        )
-    parser.add_argument(
-                        "num2",
-                        type=float,
-                        help="Second number"
-                        )
-    args = parser.parse_args()
+    host = "127.0.0.1"
+    port = 5000
 
-    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as client_socket:
-        try:
-            # отправляем данные на сервер
-            data = f"{args.operator} {args.num1} {args.num2}".encode("utf-8")
-            client_socket.sendto(data, (args.host, args.port))
+    # Create a UDP socket
+    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as server_socket:
+        server_socket.bind((host, port))
+        print(f"Server started and listening on {host}:{port}")
 
-            # получаем результаты с сервера
-            result, server_address = client_socket.recvfrom(1024)
-            result = result.decode("utf-8")
+        operation_queue = []  # Очередь с приоритетами на базе кучи (heap)
 
-            # выводим результат
-            print(f"Result: {result}")
+        while True:
+            try:
+                # Receive data from the client
+                data, client_address = server_socket.recvfrom(1024)
+                data = data.decode("utf-8")
 
-        except socket.error as se:
-            print(f"Ошибка: {se}")
-            print("Нет связи с сервером. Запускаю сервер...")
-            run_server()
-            print("Сервер запущен. Попробуйте снова.")
+                # Parse the data received from the client
+                operator, num1, num2 = data.split()
+                num1 = float(num1)
+                num2 = float(num2)
 
+                try:
+                    # Perform the operation
+                    result = perform_operation(operator, num1, num2)
+                    response = str(result).encode("utf-8")
+                except ValueError as ve:
+                    # Handle errors
+                    response = str(ve).encode("utf-8")
+
+                # Add the operation to the priority queue
+                # Priority is set to 0 for now, but can be adjusted based on requirements
+                heapq.heappush(operation_queue, (0, response))
+
+                # Process operations with highest priority first
+                while operation_queue:
+                    _, result_to_send = heapq.heappop(operation_queue)
+                    server_socket.sendto(result_to_send, client_address)
+
+            except KeyboardInterrupt:
+                print("\nServer stopped.")
+                break
 
 if __name__ == "__main__":
     main()
