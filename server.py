@@ -25,7 +25,7 @@ def main():
     # Создаем UDP socket
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as server_socket:
         server_socket.bind((host, port))
-        print(f"Server started and listening on {host}:{port}")
+        print(f"Сервер запущен и слушает на {host}:{port}")
 
         operation_queue = []  # Очередь с приоритетами (heap)
 
@@ -45,20 +45,21 @@ def main():
                     result = perform_operation(operator, num1, num2)
                     response = str(result).encode("utf-8")
                 except ValueError as ve:
-                    # Handle errors
+                    # Обрабатываем ошибки
                     response = str(ve).encode("utf-8")
 
-                # Add the operation to the priority queue
-                # Priority is set to 0 for now, but can be adjusted based on requirements
+                # Добавляем операцию в очередь с приоритетами
+                # Приоритет пока установлен на 0, но может быть
+                # изменен в зависимости от требований
                 heapq.heappush(operation_queue, (0, response))
 
-                # Process operations with highest priority first
+                # Обрабатываем операции с наивысшим приоритетом первыми
                 while operation_queue:
                     _, result_to_send = heapq.heappop(operation_queue)
                     server_socket.sendto(result_to_send, client_address)
 
             except KeyboardInterrupt:
-                print("\nServer stopped.")
+                print("\nСервер остановлен.")
                 break
 
 
