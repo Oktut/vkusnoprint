@@ -56,22 +56,22 @@ def main():
 
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as client_socket:
         try:
-            # Send the data to the server
+            # отправляем данные на сервер
             data = f"{args.operator} {args.num1} {args.num2}".encode("utf-8")
             client_socket.sendto(data, (args.host, args.port))
 
-            # Receive the result from the server
+            # получаем результаты с сервера
             result, server_address = client_socket.recvfrom(1024)
             result = result.decode("utf-8")
 
-            # Display the result
+            # выводим результат
             print(f"Result: {result}")
 
         except socket.error as se:
-            print(f"Error: {se}")
-            print("Could not connect to the server. Starting the server...")
+            print(f"Ошибка: {se}")
+            print("Нет связи с сервером. Запускаю сервер...")
             run_server()
-            print("Server started. Please try again.")
+            print("Сервер запущен. Попробуйте снова.")
 
 
 if __name__ == "__main__":
