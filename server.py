@@ -13,9 +13,9 @@ def perform_operation(operator, num1, num2):
         if num2 != 0:
             return num1 / num2
         else:
-            raise ValueError("Division by zero is not allowed.")
+            raise ValueError("На ноль делить нельзя.")
     else:
-        raise ValueError("Unsupported operator.")
+        raise ValueError("Такого оператора у нас нет.")
 
 
 def main():
