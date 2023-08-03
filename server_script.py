@@ -19,25 +19,34 @@ import signal
 # перед остановкой.
 
 
-def perform_operation(operator, num1, num2):    # Эта функция выполняет
-    if operator == '+':                         # арифметические операции
-        return num1 + num2                      # (+, -, *, /)
-    elif operator == '-':                       # над двумя числами и
-        return num1 - num2                      # возвращает результат.
-    elif operator == '*':                       # Если операция деления (/)
-        return num1 * num2                      # выполняется с нулевым
-    elif operator == '/':                       # делителем, функция
-        if num2 != 0:                           # вызывает исключение
-            return num1 / num2                  # ValueError.
+def perform_operation(operator, num1, num2):
+    # Эта функция выполняет арифметические операции (+, -, *, /)
+    # над двумя числами и возвращает результат.
+    if operator == '+':
+        return num1 + num2
+    elif operator == '-':
+        return num1 - num2
+    elif operator == '*':
+        return num1 * num2
+    elif operator == '/':
+        if num2 != 0:
+            return num1 / num2
         else:
             raise ValueError("На ноль делить нельзя.")
+        # Если операция деления (/) выполняется с нулевым делителем,
+        # функция вызывает исключение ValueError.
     else:
         raise ValueError("Такого оператора у нас нет.")
 
 
 def run_server():
+    # Данная функция запускает сервер в новом процессе с помощью модуля
+    # subprocess.
     server_script = "server.py"
     server_process = subprocess.Popen(["python", server_script])
+    # Она возвращает объект subprocess.Popen, который представляет запущенный
+    # процесс сервера. Этот объект позволяет нам управлять сервером и, при
+    # необходимости, останавливать его.
     return server_process
 
 
@@ -99,7 +108,8 @@ def main():
                     print(f"Result: {result}")
                     break
             except KeyboardInterrupt:
-                # Если пользователь нажал Ctrl+C, останавливаем сервер и завершаем программу
+                # Если пользователь нажал Ctrl+C, останавливаем
+                # сервер и завершаем программу
                 print("Останавливаю сервер...")
                 os.killpg(os.getpgid(server_process.pid), signal.SIGTERM)
                 print("Сервер остановлен.")
