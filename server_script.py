@@ -51,6 +51,9 @@ def run_server():
 
 
 def main():
+    # Данная функция парсит аргументы командной строки, которые переданы при
+    # запуске клиента. Аргументы включают адрес сервера, порт, оператор и
+    # числа для выполнения операции.
     parser = argparse.ArgumentParser(description="Remote Calculator Client")
     parser.add_argument(
         "host",
@@ -80,9 +83,11 @@ def main():
     )
     args = parser.parse_args()
 
+    # Создает UDP-сокет для обмена данными с сервером.
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as client_socket:
         try:
-            # отправляем данные на сервер
+            # Попытка отправить запрос на сервер с переданными
+            # оператором и числами.
             data = f"{args.operator} {args.num1} {args.num2}".encode("utf-8")
             client_socket.sendto(data, (args.host, args.port))
 
