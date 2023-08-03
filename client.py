@@ -10,7 +10,7 @@ def main():
         while True:
             # Получаем ввод от пользователя
             operator = input(
-                            "Enter the operator (+, -, *, /) or 'q' to quit: "
+                            "Введите оператор (+, -, *, /) or 'q' to quit: "
                             )
             if operator == 'q':
                 break
