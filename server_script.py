@@ -119,6 +119,8 @@ def main():
                 os.killpg(os.getpgid(server_process.pid), signal.SIGTERM)
                 print("Сервер остановлен.")
                 exit(0)
+                # При нажатии Ctrl+C, клиент останавливает сервер и успешно
+                # завершает свою работу без ошибок
 
 
 if __name__ == "__main__":
