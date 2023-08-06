@@ -15,8 +15,19 @@ def main():
             if operator == 'q':
                 break
 
-            num1 = float(input("Введите первое число: "))
-            num2 = float(input("Введите второе число: "))
+            while True:
+                try:
+                    num1 = float(input("Введите первое число: "))
+                    break  # Если успешно преобразовали, выходим из цикла
+                except ValueError:
+                    print("Ошибка! Введите корректное число.")
+
+            while True:
+                try:
+                    num2 = float(input("Введите второе число: "))
+                    break  # Если успешно преобразовали, выходим из цикла
+                except ValueError:
+                    print("Ошибка! Введите корректное число.")
 
             # Подготавливаем данные для отправки на сервер
             data = f"{operator} {num1} {num2}".encode("utf-8")
