@@ -8,26 +8,32 @@ def main():
     # Создаем UDP-сокет
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as client_socket:
         while True:
-            # Получаем ввод от пользователя
-            operator = input(
-                            "Введите оператор (+, -, *, /) or 'q' to quit: "
-                            )
+            # Получаем ввод от пользователя для оператора
+            while True:
+                operator = input(
+                    "Введите оператор (+, -, *, /) or 'q' to quit: \n"
+                )
+                if operator in ['+', '-', '*', '/', 'q']:
+                    break
+                else:
+                    print("Ошибка! Введите корректный оператор (+, -, *, /) или 'q'.\n")
+
             if operator == 'q':
                 break
 
             while True:
                 try:
-                    num1 = float(input("Введите первое число: "))
+                    num1 = float(input("Введите первое число: \n"))
                     break  # Если успешно преобразовали, выходим из цикла
                 except ValueError:
-                    print("Ошибка! Введите корректное число.")
+                    print("Ошибка! Введите корректное число.\n")
 
             while True:
                 try:
-                    num2 = float(input("Введите второе число: "))
+                    num2 = float(input("Введите второе число: \n"))
                     break  # Если успешно преобразовали, выходим из цикла
                 except ValueError:
-                    print("Ошибка! Введите корректное число.")
+                    print("Ошибка! Введите корректное число.\n")
 
             # Подготавливаем данные для отправки на сервер
             data = f"{operator} {num1} {num2}".encode("utf-8")
@@ -40,8 +46,15 @@ def main():
                 result, server_address = client_socket.recvfrom(1024)
                 result = result.decode("utf-8")
 
+                # Форматируем вывод результата в зависимости от типа числа
+                if num1.is_integer() and num2.is_integer():
+                    formatted_result = str(int(float(result)))
+                else:
+                    formatted_result = result
+
                 # Выводим результат на экран
-                print(f"Результат: {result}")
+                print(f"Результат: {formatted_result}\n")
+
             except KeyboardInterrupt:
                 print("\nCКлиент остановлен.")
                 break
