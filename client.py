@@ -11,12 +11,12 @@ def main():
             # Получаем ввод от пользователя для оператора
             while True:
                 operator = input(
-                    "Введите оператор (+, -, *, /) or 'q' to quit: \n"
+                    "Введите оператор \033[31m(+, -, *, /)\033[0m or \033[31m'q'\033[0m to quit: \n"
                 )
                 if operator in ['+', '-', '*', '/', 'q']:
                     break
                 else:
-                    print("Ошибка! Введите корректный оператор (+, -, *, /) или 'q'.\n")
+                    print("\033[33mОшибка!\033[0m Введите корректный оператор \033[31m(+, -, *, /)\033[0m or \033[31m'q'\033[0m to quit: \n")
 
             if operator == 'q':
                 break
@@ -53,7 +53,7 @@ def main():
                     formatted_result = result
 
                 # Выводим результат на экран
-                print(f"Результат: {formatted_result}\n")
+                print(f"Результат: \033[34m{formatted_result}\033[0m\n")
 
             except KeyboardInterrupt:
                 print("\nCКлиент остановлен.")
